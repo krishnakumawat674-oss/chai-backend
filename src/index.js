@@ -1,34 +1,36 @@
 import dotenv from "dotenv";
+dotenv.config({ path: "./.env" });
+
 import connectDB from "./db/index.js";
 import { app } from "./app.js";
 
-dotenv.config({
-    path: "./.env"
-});
+const PORT = Number(process.env.PORT) || 7000;
 
 connectDB()
-.then(() => {
-    app.listen(process.env.PORT || 8000, () => {
-        console.log(`server is running at port : ${process.env.PORT}`);
-        
+    .then(() => {
+
+        const server = app.listen(PORT, "0.0.0.0", () => {
+            console.log("=================================");
+            console.log("SERVER STARTED");
+            console.log("PORT:", PORT);
+            console.log("ADDRESS:", server.address());
+            console.log("=================================");
+        });
+
+        server.on("error", (error) => {
+            console.log("SERVER ERROR:", error);
+        });
     })
-})
-.catch((err) => {
-    console.log("MONGO db connection failed !!!", err);
+    .catch((err) => {
+        console.log("MONGODB CONNECTION FAILED:", err);
+    });
+
+
+
+
+
+
     
-})
-
-
-
-
-
-
-
-
-
-
-
-
 // import expres from 'express'
 // const app = expres()
 
